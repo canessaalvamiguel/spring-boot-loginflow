@@ -35,6 +35,8 @@ public class AppUserService implements UserDetailsService {
                 .findByEmail(appUser.getEmail())
                 .isPresent();
         if(userExists){
+            // TODO check of attributes are the same and
+            // TODO if email not confirmed send confirmation email.
             throw new IllegalStateException("email already taken");
         }
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
@@ -49,8 +51,6 @@ public class AppUserService implements UserDetailsService {
                 LocalDateTime.now().plusMinutes(15),
                 appUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        //TODO: SEND EMAIL
 
         return token;
     }
